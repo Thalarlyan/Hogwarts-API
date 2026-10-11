@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "cds-serve",
-    "watch": "cds watch"
+    "watch": "cds watch",
+    "watch-hogwarts": "cds watch --open hogwarts/index.html?sap-ui-xx-viewCache=false --livereload false"
   },
   "repository": {
     "type": "git",
@@ -22,6 +23,13 @@
     "express": "^5.3.0"
   },
   "devDependencies": {
-    "@cap-js/sqlite": "^3.1.1"
-  }
+    "@cap-js/sqlite": "^3.1.1",
+    "cds-plugin-ui5": "^0.17.0"
+  },
+  "workspaces": [
+    "app/*"
+  ],
+  "sapux": [
+    "app/hogwarts"
+  ]
 }

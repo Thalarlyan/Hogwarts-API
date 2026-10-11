@@ -1,0 +1,28 @@
+{
+  "generationParameters": {
+    "generationDate": "Sun Oct 11 2026 14:14:19 GMT+0200 (Central European Summer Time)",
+    "generatorPlatform": "Visual Studio Code",
+    "serviceType": "Local CAP",
+    "metadataFilename": "",
+    "serviceUrl": "http://localhost:4004/odata/v4/hogwarts/",
+    "appName": "hogwarts",
+    "appTitle": "hogwarts characters",
+    "appDescription": "Hogwarts characters and the books they appear in",
+    "appNamespace": "",
+    "ui5Theme": "sap_horizon",
+    "ui5Version": "1.153.0",
+    "enableEslint": true,
+    "enableTypeScript": false,
+    "showMockDataInfo": false,
+    "generatorVersion": "1.33.0",
+    "template": "List Report Page V4",
+    "generatorName": "SAP Fiori Application Generator",
+    "entityRelatedConfig": [
+      {
+        "type": "Main Entity",
+        "value": "CharacterBooks"
+      }
+    ],
+    "launchText": "To launch the generated app, start your CAP project:  and navigate to the following location in your browser:\n\nhttp://localhost:4004/hogwarts/webapp/index.html"
+  }
+}
