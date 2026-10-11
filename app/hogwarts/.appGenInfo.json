@@ -1,12 +1,12 @@
 {
   "generationParameters": {
-    "generationDate": "Sun Oct 11 2026 14:14:19 GMT+0200 (Central European Summer Time)",
+    "generationDate": "Sun Oct 11 2026 14:32:15 GMT+0200 (Central European Summer Time)",
     "generatorPlatform": "Visual Studio Code",
     "serviceType": "Local CAP",
     "metadataFilename": "",
     "serviceUrl": "http://localhost:4004/odata/v4/hogwarts/",
     "appName": "hogwarts",
-    "appTitle": "hogwarts characters",
+    "appTitle": "Hogwarts Characters",
     "appDescription": "Hogwarts characters and the books they appear in",
     "appNamespace": "",
     "ui5Theme": "sap_horizon",
@@ -20,9 +20,13 @@
     "entityRelatedConfig": [
       {
         "type": "Main Entity",
-        "value": "CharacterBooks"
+        "value": "Characters"
+      },
+      {
+        "type": "Navigation Entity",
+        "value": "books"
       }
     ],
-    "launchText": "To launch the generated app, start your CAP project:  and navigate to the following location in your browser:\n\nhttp://localhost:4004/hogwarts/webapp/index.html"
+    "launchText": "To launch the generated app, start your CAP project:  and navigate to the following location in your browser:\n\nhttp://localhost:4004/hogwarts/index.html"
   }
 }

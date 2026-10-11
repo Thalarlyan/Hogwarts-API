@@ -1,7 +1,7 @@
 ## Application Details
 |               |
 | ------------- |
-|**Generation Date and Time**<br>Sun Oct 11 2026 14:14:19 GMT+0200 (Central European Summer Time)|
+|**Generation Date and Time**<br>Sun Oct 11 2026 14:32:15 GMT+0200 (Central European Summer Time)|
 |**App Generator**<br>SAP Fiori Application Generator|
 |**App Generator Version**<br>1.33.0|
 |**Generation Platform**<br>Visual Studio Code|
@@ -9,13 +9,14 @@
 |**Service Type**<br>Local CAP|
 |**Service URL**<br>http://localhost:4004/odata/v4/hogwarts/|
 |**Module Name**<br>hogwarts|
-|**Application Title**<br>hogwarts characters|
+|**Application Title**<br>Hogwarts Characters|
 |**Namespace**<br>|
 |**UI5 Theme**<br>sap_horizon|
 |**UI5 Version**<br>1.153.0|
 |**Enable TypeScript**<br>False|
 |**Add Eslint configuration**<br>True, see https://www.npmjs.com/package/@sap-ux/eslint-plugin-fiori-tools#rules for the eslint rules.|
-|**Main Entity**<br>CharacterBooks|
+|**Main Entity**<br>Characters|
+|**Navigation Entity**<br>books|
 
 ## hogwarts
 
@@ -25,7 +26,7 @@ Hogwarts characters and the books they appear in
 
 -   This app has been generated using the SAP Fiori tools - App Generator, as part of the SAP Fiori tools suite.  To launch the generated app, start your CAP project:  and navigate to the following location in your browser:
 
-http://localhost:4004/hogwarts/webapp/index.html
+http://localhost:4004/hogwarts/index.html
 
 #### Pre-requisites:
 

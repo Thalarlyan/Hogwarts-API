@@ -13,7 +13,7 @@
     "sourceTemplate": {
       "id": "@sap/generator-fiori:lrop",
       "version": "1.33.0",
-      "toolsId": "846c94ec-6715-41bd-a568-273a7ad9de48"
+      "toolsId": "bdfbcc7e-d443-43ba-9441-c37232dfef8f"
     },
     "dataSources": {
       "mainService": {
@@ -85,28 +85,33 @@
       "routes": [
         {
           "pattern": ":?query:",
-          "name": "CharacterBooksList",
-          "target": "CharacterBooksList"
+          "name": "CharactersList",
+          "target": "CharactersList"
         },
         {
-          "pattern": "CharacterBooks({key}):?query:",
+          "pattern": "Characters({key}):?query:",
+          "name": "CharactersObjectPage",
+          "target": "CharactersObjectPage"
+        },
+        {
+          "pattern": "Characters({key})/books({key2}):?query:",
           "name": "CharacterBooksObjectPage",
           "target": "CharacterBooksObjectPage"
         }
       ],
       "targets": {
-        "CharacterBooksList": {
+        "CharactersList": {
           "type": "Component",
-          "id": "CharacterBooksList",
+          "id": "CharactersList",
           "name": "sap.fe.templates.ListReport",
           "options": {
             "settings": {
-              "contextPath": "/CharacterBooks",
+              "contextPath": "/Characters",
               "variantManagement": "Page",
               "navigation": {
-                "CharacterBooks": {
+                "Characters": {
                   "detail": {
-                    "route": "CharacterBooksObjectPage"
+                    "route": "CharactersObjectPage"
                   }
                 }
               },
@@ -120,6 +125,24 @@
             }
           }
         },
+        "CharactersObjectPage": {
+          "type": "Component",
+          "id": "CharactersObjectPage",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "editableHeaderContent": false,
+              "contextPath": "/Characters",
+              "navigation": {
+                "books": {
+                  "detail": {
+                    "route": "CharacterBooksObjectPage"
+                  }
+                }
+              }
+            }
+          }
+        },
         "CharacterBooksObjectPage": {
           "type": "Component",
           "id": "CharacterBooksObjectPage",
@@ -127,7 +150,7 @@
           "options": {
             "settings": {
               "editableHeaderContent": false,
-              "contextPath": "/CharacterBooks"
+              "contextPath": "/Characters/books"
             }
           }
         }

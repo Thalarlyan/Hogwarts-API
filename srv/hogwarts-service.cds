@@ -1,7 +1,20 @@
 using { hogwarts as db } from '../db/schema';
 
 service HogwartsService {
-  entity CharacterBooks as projection on db.CharacterBooks;
 
-  function characters(page : Integer, size : Integer, q : String) returns LargeString;
+  @readonly
+  @cds.persistence.skip
+  entity Characters {
+    key ID      : String;
+        name    : String;
+        house   : String;
+        species : String;
+        gender  : String;
+        image   : String;
+        books   : Association to many CharacterBooks
+                    on books.characterID = $self.ID;
+  }
+
+  @readonly
+  entity CharacterBooks as projection on db.CharacterBooks;
 }

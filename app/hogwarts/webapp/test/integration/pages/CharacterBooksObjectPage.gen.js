@@ -27,7 +27,7 @@ sap.ui.define(['sap/fe/test/ObjectPage'], function(ObjectPage) {
         {
             appId: 'hogwarts',
             componentId: 'CharacterBooksObjectPage',
-            contextPath: '/CharacterBooks'
+            contextPath: '/Characters/books'
         },
         CustomPageDefinitions
     );

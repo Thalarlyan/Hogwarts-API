@@ -30,6 +30,7 @@
     "app/*"
   ],
   "sapux": [
+    "app/hogwarts",
     "app/hogwarts"
   ]
 }

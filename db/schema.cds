@@ -1,8 +1,11 @@
 namespace hogwarts;
 
 entity CharacterBooks {
-  key characterId : String;
-  characterName   : String;
-  booksJson       : LargeString;  // cached Gemini + book data result
-  updatedAt       : Timestamp;
+  key characterID : String;
+  key bookID      : String;
+      title       : String;
+      author      : String;
+      releaseDate : String;
+      pages       : Integer;
+      cover       : String;
 }

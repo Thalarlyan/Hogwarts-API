@@ -1,27 +1,37 @@
 using HogwartsService as service from '../../srv/hogwarts-service';
-annotate service.CharacterBooks with @(
+annotate service.Characters with @(
     UI.FieldGroup #GeneratedGroup : {
         $Type : 'UI.FieldGroupType',
         Data : [
             {
                 $Type : 'UI.DataField',
-                Label : 'characterId',
-                Value : characterId,
+                Label : 'ID',
+                Value : ID,
             },
             {
                 $Type : 'UI.DataField',
-                Label : 'characterName',
-                Value : characterName,
+                Label : 'name',
+                Value : name,
             },
             {
                 $Type : 'UI.DataField',
-                Label : 'booksJson',
-                Value : booksJson,
+                Label : 'house',
+                Value : house,
             },
             {
                 $Type : 'UI.DataField',
-                Label : 'updatedAt',
-                Value : updatedAt,
+                Label : 'species',
+                Value : species,
+            },
+            {
+                $Type : 'UI.DataField',
+                Label : 'gender',
+                Value : gender,
+            },
+            {
+                $Type : 'UI.DataField',
+                Label : 'image',
+                Value : image,
             },
         ],
     },
@@ -36,23 +46,28 @@ annotate service.CharacterBooks with @(
     UI.LineItem : [
         {
             $Type : 'UI.DataField',
-            Label : 'characterId',
-            Value : characterId,
+            Label : 'ID',
+            Value : ID,
         },
         {
             $Type : 'UI.DataField',
-            Label : 'characterName',
-            Value : characterName,
+            Label : 'name',
+            Value : name,
         },
         {
             $Type : 'UI.DataField',
-            Label : 'booksJson',
-            Value : booksJson,
+            Label : 'house',
+            Value : house,
         },
         {
             $Type : 'UI.DataField',
-            Label : 'updatedAt',
-            Value : updatedAt,
+            Label : 'species',
+            Value : species,
+        },
+        {
+            $Type : 'UI.DataField',
+            Label : 'gender',
+            Value : gender,
         },
     ],
 );

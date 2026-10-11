@@ -1,14 +1,16 @@
 sap.ui.define([
     "sap/fe/test/JourneyRunner",
-	"hogwarts/test/integration/pages/CharacterBooksList.gen",
+	"hogwarts/test/integration/pages/CharactersList.gen",
+	"hogwarts/test/integration/pages/CharactersObjectPage.gen",
 	"hogwarts/test/integration/pages/CharacterBooksObjectPage.gen"
-], function (JourneyRunner, CharacterBooksListGenerated, CharacterBooksObjectPageGenerated) {
+], function (JourneyRunner, CharactersListGenerated, CharactersObjectPageGenerated, CharacterBooksObjectPageGenerated) {
     'use strict';
 
     const runner = new JourneyRunner({
         launchUrl: sap.ui.require.toUrl('hogwarts') + '/test/flp.html#app-preview',
         pages: {
-			onTheCharacterBooksListGenerated: CharacterBooksListGenerated,
+			onTheCharactersListGenerated: CharactersListGenerated,
+			onTheCharactersObjectPageGenerated: CharactersObjectPageGenerated,
 			onTheCharacterBooksObjectPageGenerated: CharacterBooksObjectPageGenerated
         },
         async: true
