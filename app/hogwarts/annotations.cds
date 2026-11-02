@@ -1,5 +1,27 @@
 using HogwartsService as service from '../../srv/hogwarts-service';
+
+annotate service.Characters with {
+    @Common.ValueListWithFixedValues : true
+    @Common.ValueList : {
+        $Type : 'Common.ValueListType',
+        CollectionPath : 'Houses',
+        Parameters : [
+            {
+                $Type : 'Common.ValueListParameterInOut',
+                LocalDataProperty : house,
+                ValueListProperty : 'house',
+            },
+        ],
+    }
+    house;
+};
+
 annotate service.Characters with @(
+    UI.SelectionFields : [
+        ID,
+        name,
+        house,
+    ],
     UI.FieldGroup #GeneratedGroup : {
         $Type : 'UI.FieldGroupType',
         Data : [
@@ -71,4 +93,3 @@ annotate service.Characters with @(
         },
     ],
 );
-

@@ -4,6 +4,12 @@ service HogwartsService {
 
   @readonly
   @cds.persistence.skip
+  entity Houses {
+    key house : String;
+  }
+
+  @readonly
+  @cds.persistence.skip
   entity Characters {
     key ID      : String;
         name    : String;

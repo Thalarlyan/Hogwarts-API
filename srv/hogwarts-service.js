@@ -6,13 +6,13 @@ let charactersCache
 let cacheExpiresAt = 0
 let charactersRequest
 
-// collects the house values from the $filter that Fiori elements sends
-function houseValues(where = []) {
+// collects the values for a field from the $filter that Fiori elements sends
+function filterValues(where = [], field) {
   const out = []
   for (let i = 0; i < where.length; i++) {
     const t = where[i]
-    if (t.xpr) out.push(...houseValues(t.xpr))
-    if (t.ref?.[0] === 'house') {
+    if (t.xpr) out.push(...filterValues(t.xpr, field))
+    if (t.ref?.[0] === field) {
       const v = where[i + 2]
       if (v?.val != null) out.push(v.val)
       else if (v?.list) out.push(...v.list.map(x => x.val))
@@ -68,7 +68,14 @@ function upstreamError(req, error) {
 
 module.exports = class HogwartsService extends cds.ApplicationService {
   async init() {
-    const { Characters, CharacterBooks } = this.entities
+    const { Characters, CharacterBooks, Houses } = this.entities
+
+    this.on('READ', Houses, () => [
+      { house: 'Gryffindor' },
+      { house: 'Hufflepuff' },
+      { house: 'Ravenclaw' },
+      { house: 'Slytherin' }
+    ])
 
     this.on('READ', Characters, async (req) => {
       const [key] = req.params
@@ -90,11 +97,15 @@ module.exports = class HogwartsService extends cds.ApplicationService {
       const size = Number.isFinite(requestedSize) ? Math.max(0, requestedSize) : 25
       const offset = Number.isFinite(requestedOffset) ? Math.max(0, requestedOffset) : 0
       const query = search?.map(token => token.val).filter(Boolean).join(' ').toLocaleLowerCase()
-      const houses = houseValues(where).map(house => String(house).toLocaleLowerCase())
+      const ids = filterValues(where, 'ID').map(id => String(id))
+      const names = filterValues(where, 'name').map(name => String(name).toLocaleLowerCase())
+      const houses = filterValues(where, 'house').map(house => String(house).toLocaleLowerCase())
 
       try {
         const characters = await getCharacters()
         const matching = characters
+          .filter(character => !ids.length || ids.includes(String(character.id)))
+          .filter(character => !names.length || names.includes((character.name || '').toLocaleLowerCase()))
           .filter(character => !query || character.name?.toLocaleLowerCase().includes(query))
           .filter(character => !houses.length || houses.includes((character.house || '').toLocaleLowerCase()))
         const rows = matching.slice(offset, offset + size).map(toRow)
