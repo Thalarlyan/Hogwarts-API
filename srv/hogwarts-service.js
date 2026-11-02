@@ -1,5 +1,10 @@
 const cds = require('@sap/cds')
-const BASE = process.env.HOGWARTS_API_URL || 'https://api.potterdb.com/v1'
+const BASE = (process.env.HOGWARTS_API_URL || 'https://hogwarts-api.com/api').replace(/\/+$/, '')
+const CACHE_TTL = 5 * 60 * 1000
+
+let charactersCache
+let cacheExpiresAt = 0
+let charactersRequest
 
 // collects the house values from the $filter that Fiori elements sends
 function houseValues(where = []) {
@@ -16,47 +21,88 @@ function houseValues(where = []) {
   return out
 }
 
-const toRow = c => ({
-  ID: c.id,
-  name: c.attributes.name,
-  house: c.attributes.house,
-  species: c.attributes.species,
-  gender: c.attributes.gender,
-  image: c.attributes.image
+const toRow = character => ({
+  ID: character.id,
+  name: character.name,
+  house: character.house,
+  species: character.species,
+  gender: character.gender,
+  image: character.image
 })
+
+async function requestJson(path) {
+  const response = await fetch(`${BASE}${path}`)
+  if (!response.ok) {
+    const error = new Error(`Hogwarts API returned HTTP ${response.status}`)
+    error.status = response.status
+    throw error
+  }
+  return response.json()
+}
+
+async function getCharacters() {
+  if (charactersCache && Date.now() < cacheExpiresAt) return charactersCache
+
+  if (!charactersRequest) {
+    charactersRequest = requestJson('/characters')
+      .then(body => {
+        if (!Array.isArray(body.data)) {
+          throw new Error('Hogwarts API returned an invalid characters response')
+        }
+        charactersCache = body.data
+        cacheExpiresAt = Date.now() + CACHE_TTL
+        return charactersCache
+      })
+      .finally(() => {
+        charactersRequest = undefined
+      })
+  }
+
+  return charactersRequest
+}
+
+function upstreamError(req, error) {
+  const status = error.status === 404 ? 404 : 502
+  return req.reject(status, error.message || 'Hogwarts API request failed')
+}
 
 module.exports = class HogwartsService extends cds.ApplicationService {
   async init() {
     const { Characters, CharacterBooks } = this.entities
 
     this.on('READ', Characters, async (req) => {
-      // profile page: one character by key
       const [key] = req.params
       if (key) {
         const id = typeof key === 'object' ? key.ID : key
-        const res = await fetch(`${BASE}/characters/${id}`)
-        if (!res.ok) return req.reject(502, `Upstream error ${res.status}`)
-        return toRow((await res.json()).data)
+        if (id == null) return req.reject(400, 'Character ID is required')
+        try {
+          const character = (await getCharacters()).find(item => item.id === String(id))
+          if (!character) return req.reject(404, `Character ${id} not found`)
+          return toRow(character)
+        } catch (error) {
+          return upstreamError(req, error)
+        }
       }
 
-      // list page: paging, search, house filter
       const { limit, search, where } = req.query.SELECT
-      const size = limit?.rows?.val ?? 25
-      const offset = limit?.offset?.val ?? 0
-      const params = new URLSearchParams({
-        'page[size]': size,
-        'page[number]': Math.floor(offset / size) + 1
-      })
-      const q = search?.map(s => s.val).filter(Boolean).join(' ')
-      if (q) params.set('filter[name_cont]', q)
-      houseValues(where).forEach(h => params.append('filter[house_in][]', h))
+      const requestedSize = Number(limit?.rows?.val ?? 25)
+      const requestedOffset = Number(limit?.offset?.val ?? 0)
+      const size = Number.isFinite(requestedSize) ? Math.max(0, requestedSize) : 25
+      const offset = Number.isFinite(requestedOffset) ? Math.max(0, requestedOffset) : 0
+      const query = search?.map(token => token.val).filter(Boolean).join(' ').toLocaleLowerCase()
+      const houses = houseValues(where).map(house => String(house).toLocaleLowerCase())
 
-      const res = await fetch(`${BASE}/characters?${params}`)
-      if (!res.ok) return req.reject(502, `Upstream error ${res.status}`)
-      const body = await res.json()
-      const rows = body.data.map(toRow)
-      rows.$count = body.meta?.pagination?.records ?? rows.length
-      return rows
+      try {
+        const characters = await getCharacters()
+        const matching = characters
+          .filter(character => !query || character.name?.toLocaleLowerCase().includes(query))
+          .filter(character => !houses.length || houses.includes((character.house || '').toLocaleLowerCase()))
+        const rows = matching.slice(offset, offset + size).map(toRow)
+        rows.$count = matching.length
+        return rows
+      } catch (error) {
+        return upstreamError(req, error)
+      }
     })
 
     // books of one character, read from the SQLite cache
